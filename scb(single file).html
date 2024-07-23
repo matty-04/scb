@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCS SCB</title>
+    <style>
+        *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+body{
+    background-color: #eff3f6;
+}
+
+@font-face {
+    font-family: mcs;
+    src: url(./mcs.ttf);
+}
+
+button:hover{
+    opacity: 50%;
+    transition: .4s;
+}
+
+.left-container{
+    position: fixed;
+    background-color: rgb(31,46,84);
+    height: 100%;
+    width: 80px;
+    z-index: 1;
+}
+
+.top-container{
+    background-color: #ffffff;
+    width: 96%;
+    height: 65px;
+    left: 4.2%;
+    position: fixed;
+    box-shadow: 5px .4px 3px 4px #E7EBF4;
+    z-index: 5;
+}
+
+.top-content{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 0;
+}
+
+.top-left-container img{
+    height: 45px;
+    width: 45px;
+    margin-left: -47px;
+}
+
+.top-left-container h1{
+    font-family: mcs;
+    margin-left: 15px;
+    color: #354052;
+}
+
+.top-left-container{
+    margin-left: 4.2%;
+    display: flex;
+    align-items: center;
+}
+
+.top-right-container button{
+    font-size: 18px;
+    cursor: pointer;
+    font-family: mcs;
+    font-weight: bold;
+}
+
+.modal-login-button{
+    cursor: pointer;
+}
+
+.top-signup{
+    margin-right: 29px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border: 2px solid rgb(31,46,84);
+    background-color: transparent;
+    padding: 6px 17px;
+}
+
+.top-login{
+    margin-right: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: 2px solid #eff3f6;
+    background-color: rgb(31,46,84);
+    color: white;
+    padding: 7px 17px;
+}
+
+.content{
+    margin-left: 4.2%;
+    padding-top: 60px;
+}
+
+.modal-box{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 300%);
+    background-color: white;
+    height: 520px;
+    width: 500px;
+    opacity: 1;
+    z-index: 5;
+    border-radius: 10px;
+    padding: 40px;
+}
+
+.sign-up-modal{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 300%);
+    background-color: white;
+    width: 500px;
+    height: 580px;
+    position: fixed;
+    z-index: 5;
+    font-family: mcs;
+    border-radius: 10px;
+    padding: 40px;
+    opacity: 1;
+}
+
+.show-signup-modal{
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    transition: .3s ease;
+}
+
+.show-modal{
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    transition: .3s ease;
+}
+
+.overlay{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    opacity: 0;
+    z-index: 4;
+    top: 0;
+}
+
+.active-overlay{
+    opacity: 1;
+    transition: .3s ease-in-out;
+    pointer-events: auto;
+}
+
+.modal-box-content{
+    height: 80%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: mcs;
+}
+
+.modal-box-input-container input{
+    width: 100%;
+    border-radius: 5px;
+    height: 50px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    background-color: #F7F7F7;
+    color: #999999;
+    font-family: mcs;
+}
+
+.sign-up-modal-input-container input{
+    width: 100%;
+    border-radius: 5px;
+    height: 50px;
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    background-color: #F7F7F7;
+    color: #999999;
+    font-family: mcs;
+    margin-top: 20px;
+}
+
+.modal-box-username{
+    margin-top: 50px;
+}
+
+.modal-box-password{
+    margin-top: 20px;
+}
+
+.modal-box-content img{
+    width: 200px;
+    height: 200px;
+}
+
+.top-sign-up-modal-container img{
+    width: 200px;
+    height: 200px;
+}
+
+.top-sign-up-modal-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.sign-up-modal-button-container{
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    width: 101%;
+}
+
+.sign-up-modal-btn, .sign-up-cancel-btn{
+    margin-left: 5px;
+    margin-top: 20px;
+    border-radius: 5px;
+    border: none;
+    padding: 15px 22px;
+    color: white;
+    font-weight: bold;
+    background-color: #4D97E6;
+    width: 100%;
+    cursor: pointer;
+}
+
+.modal-box-button-container button{
+    margin-top: 20px;
+    border-radius: 5px;
+    border: none;
+    padding: 15px 22px;
+    color: white;
+    font-weight: bold;
+    background-color: #4D97E6;
+    width: 100%;
+}
+
+.modal-box-button-container{
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    width: 92%;
+}
+
+.close-top-login{
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.background img{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-size: cover;
+}
+
+.content-center{
+    left: 35%;
+    transform: translate(-55%, 4%);
+    background-color: #eff3f6;
+    width: 1000px;
+    height: 800px;
+    z-index: 2;
+    position: relative;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.end-post{
+    text-align: center;
+    color: #696B6C;
+    font-size: 10px;
+    position: relative;
+    z-index: 2;
+    margin: 60px 0 70px 0;
+    font-family: mcs;
+}
+
+.content-center-container{
+    padding: 20px;
+    text-align: center;
+    font-family: mcs;
+    font-size: 20px;
+}
+
+.candidate-profile{
+    height: 300px;
+    width: 200px;
+}
+
+.candidate-profile-container{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.candidate-profile img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.candidate-profile-container-bottom{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 50px;
+}
+
+.right-content{
+    position: absolute;
+    left: 80%;
+    top: 54%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 790px;
+    z-index: 2;
+}
+
+.right-top-container{
+    background-color: white;
+    border-radius: 5px;
+    width: 100%;
+    height: 250px;
+    padding: 15px;
+    font-family: mcs;
+    font-size: 12px;
+    color: #354052;
+}
+
+.right-top-container-content{
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    font-size: 10px;
+}
+
+.plans{
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.right-top-container-event-date{
+    height: 100%;
+    width: 70px;
+    padding: 5px 0 20px 0;
+    text-align: center;
+    background-color: rgb(199, 218, 230);
+    border-radius: 5px;
+}
+
+.right-top-container-event-month{
+    font-size: 9px;
+}
+
+.right-top-container-event-day{
+    font-size: 14px;
+}
+
+.right-top-container-event-name h1{
+    margin-left: 9px;
+}
+
+.right-top-container hr{
+    margin-top: 8px;
+}
+
+.right-bottom-container{
+    width: 150px;
+    height: 30px;
+    transform: translate(70%, 290%);
+    font-size: 10px;
+}
+
+.right-bottom-container-content a{
+    text-align: center;
+    text-decoration: none;
+    color: #354052;
+}
+
+.candidate-profile h1{
+    font-size: 26px;
+}
+    </style>
+</head>
+<body>
+    <div class="sign-up-modal">
+        <div class="sign-up-modal-container">
+            <div class="top-sign-up-modal-container">
+                <img src="https://storage.googleapis.com/oa_disk001/mcslms/76/school_logo/1625147480-1728.png">
+                <div class="sign-up-modal-input-container">
+                    <input type="text" placeholder="Email or ID Number" required>
+                    <input type="password" placeholder="Password" required>
+                    <input type="password" placeholder="Confirm Password" required>
+                </div>
+                <div class="sign-up-modal-button-container">
+                    <button class="sign-up-cancel-btn">Cancel</button>
+                    <button class="sign-up-modal-btn">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrap">
+        <div class="left-container">
+            <div class="left-content">
+            </div>
+        </div>
+        <div class="top-container">
+            <div class="top-content">
+                <div class="top-left-container">
+                    <img src="https://storage.googleapis.com/oa_disk001/mcslms/76/school_logo/1625147480-1728.png">
+                    <h1>MCS SCB</h1>
+                </div>
+                <div class="top-right-container">
+                    <button class="top-login">Log In</button>
+                    <button class="top-signup">Sign Up</button>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="content-center">
+                <div class="content-center-container">
+                    <h1>Party List Name</h1>
+                    <div class="candidate-profile-container">
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                    </div>
+                    <div class="candidate-profile-container-bottom">
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-center">
+                <div class="content-center-container">
+                    <h1>Party List Name</h1>
+                    <div class="candidate-profile-container">
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                    </div>
+                    <div class="candidate-profile-container-bottom">
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-center">
+                <div class="content-center-container">
+                    <h1>Party List Name</h1>
+                    <div class="candidate-profile-container">
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                    </div>
+                    <div class="candidate-profile-container-bottom">
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                        <div class="candidate-profile">
+                            <img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420932012_395947672946057_7025593992891309810_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KADZnpOcsxgQ7kNvgFxxgOQ&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYBRerk-9xdvA1NnN7Das43_P2rdJbk6HY1-UF9gQvn9Vg&oe=66A51A98">
+                            <h1>Name</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="end-post">
+                <h1>You have Reached the end of the post</h1>
+            </div>
+        </div>
+        <div class="right-content">
+            <div class="right-container">
+                <div class="right-top-container">
+                    <h1 class="plans`">Events</h1>
+                    <div class="right-top-container-content">
+                        <div class="right-top-container-event-date">
+                            <div class="right-top-container-event-month">
+                                <h1>AUG</h1>
+                            </div>
+                            <div class="right-top-container-event-day">
+                                <h1>8</h1>
+                            </div>
+                        </div>
+                        <div class="right-top-container-event-name">
+                            <h1>SCB Election Day</h1>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="right-bottom-container">
+                        <div class="right-bottom-container-content">
+                            <a href="#"><h1>View More</h1></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-box">
+            <div class="modal-box-content"> 
+                <img src="https://storage.googleapis.com/oa_disk001/mcslms/76/school_logo/1625147480-1728.png">
+                <div class="modal-box-input-container">
+                    <input type="text" required class="modal-box-username" placeholder="Email or ID Number">
+                    <input type="password" required class="modal-box-password" placeholder="Password">
+                </div>
+                <div class="modal-box-button-container">
+                    <button class="close-top-login">Cancel</button>
+                    <button class="modal-login-button">Login</button>
+                </div>
+            </div>`
+        </div>
+    </div>
+    <div class="overlay"></div>
+    <div class="background"><img src="https://scontent.fmnl25-4.fna.fbcdn.net/v/t39.30808-6/420948839_395947756279382_4400979920063186483_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=tu1b85LOhJEQ7kNvgGVFcCv&_nc_ht=scontent.fmnl25-4.fna&oh=00_AYA7wT8SAUi_sYqjE8Urmoy3Ka_ltotkCSONP8zMc6lFrg&oe=66A4EC4A"></div>
+</body>
+<script>
+    let showLoginbtn = document.querySelector(".top-login");
+    let closeLoginbtn = document.querySelector(".close-top-login");
+    let modal = document.querySelector(".modal-box");
+    let overlay = document.querySelector(".overlay");
+    let wrap = document.querySelector(".wrap");
+    let signUpbtn = document.querySelector(".top-signup")
+    let signupModal = document.querySelector(".sign-up-modal")
+    let signUpbtnclose = document.querySelector(".sign-up-cancel-btn");
+
+    showLoginbtn.addEventListener("click", () => modal.classList.add("show-modal"));
+    showLoginbtn.addEventListener("click", () => overlay.classList.add("active-overlay"));
+    closeLoginbtn.addEventListener("click", () => modal.classList.remove("show-modal"));
+    closeLoginbtn.addEventListener("click", () => overlay.classList.remove("active-overlay"));
+    signUpbtn.addEventListener("click", () => signupModal.classList.add("show-signup-modal"));
+    signUpbtn.addEventListener("click", () => overlay.classList.add("active-overlay"));
+    signUpbtnclose.addEventListener("click", () => signupModal.classList.remove("show-signup-modal"));
+    signUpbtnclose.addEventListener("click", () => overlay.classList.remove("active-overlay"));
+</script>
+</html>
